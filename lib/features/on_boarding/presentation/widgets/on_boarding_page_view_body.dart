@@ -22,7 +22,7 @@ class OnBoardingPageViewBody extends StatelessWidget {
         ),
         PageViewItem(
           isVisible: false,
-          image: AppImages.OnBoardingImage1,
+          image: AppImages.OnBoardingImage2,
           title: 'Sign Language, Anywhere',
           description: 'Use ready-made signs and symbols to communicate instantly.',
           buttonText: 'Start',
