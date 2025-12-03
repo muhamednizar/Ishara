@@ -12,6 +12,7 @@ class OnBoardingPageViewBody extends StatelessWidget {
       children: [
         PageViewItem(
           
+          
           image: AppImages.OnBoardingImage1,
           title: 'Communication Made Simple',
           description: 'Express yourself clearly, without speaking.',
