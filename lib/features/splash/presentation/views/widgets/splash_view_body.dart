@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:ishara/core/utils/app_color.dart';
 import 'package:ishara/core/utils/app_images.dart';
-import 'package:ishara/features/home/home_view.dart';
 import 'package:ishara/features/on_boarding/presentation/views/on_boarding_view.dart';
 
 class SplashViewBody extends StatefulWidget {

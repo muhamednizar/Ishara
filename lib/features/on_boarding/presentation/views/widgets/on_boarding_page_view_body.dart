@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ishara/core/utils/app_images.dart';
-import 'package:ishara/features/on_boarding/presentation/widgets/page_view_item.dart';
+import 'package:ishara/features/auth/presentation/views/login_view.dart';
+import 'package:ishara/features/on_boarding/presentation/views/widgets/page_view_item.dart';
 
 class OnBoardingPageViewBody extends StatelessWidget {
   OnBoardingPageViewBody({super.key, required this.controller});
@@ -27,6 +28,9 @@ class OnBoardingPageViewBody extends StatelessWidget {
           title: 'Sign Language, Anywhere',
           description: 'Use ready-made signs and symbols to communicate instantly.',
           buttonText: 'Start',
+          onPressed: () {
+            Navigator.pushNamed(context, LoginView.routeName);
+          }
         ),
       ],
     );

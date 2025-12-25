@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ishara/core/helper_functions/on_generate_routes.dart';
+import 'package:ishara/core/utils/app_color.dart';
 import 'package:ishara/features/splash/presentation/views/splash_view.dart';
 
 void main() {
@@ -11,6 +12,15 @@ class IsharaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          backgroundColor: AppColors.primaryColorLight,
+          elevation: 0,
+          centerTitle: true,
+        ),
+        scaffoldBackgroundColor: Colors.white,
+        fontFamily: 'Inter',
+      ),
       debugShowCheckedModeBanner: false,
       initialRoute: SplashView.routeName,
       onGenerateRoute: onGenerateRoute,

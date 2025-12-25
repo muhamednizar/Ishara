@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ishara/core/utils/app_text_style.dart';
 import 'package:ishara/core/widgets/custom_button.dart';
-import 'package:ishara/features/home/home_view.dart';
+import 'package:ishara/features/auth/presentation/views/login_view.dart';
 
 class PageViewItem extends StatelessWidget {
   PageViewItem({
@@ -26,7 +27,7 @@ class PageViewItem extends StatelessWidget {
       ),
       child: Column(
         children: [
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -36,38 +37,38 @@ class PageViewItem extends StatelessWidget {
                   maintainState: true,
                   maintainAnimation: true,
                   child: GestureDetector(onTap: () {
-                    Navigator.pushReplacementNamed(context, HomeView.routeName);
-                  }, child: Text('Skip', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)))),
+                    Navigator.pushNamed(context, LoginView.routeName);
+                  }, child: Text('Skip', style: TextStyles.semiBold24))),
             ],
           ),
-          SizedBox(height: 25),
+          const SizedBox(height: 25),
           Image.asset(
             image,
             width: 350,
             height: 350,
           ),
-          SizedBox(height: 37),
+          const SizedBox(height: 37),
           Text(
             title,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: TextStyles.semiBold24,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               description,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+              style: TextStyles.medium16,
               textAlign: TextAlign.center,
             ),
           ),
-          Spacer(),
+          const Spacer(),
           CustomButton(
             text: buttonText,
             onPressed: onPressed ?? () {},
             width: 343,
             height: 48,
           ),
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
         ],
       ),
     );
