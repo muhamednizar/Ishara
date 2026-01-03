@@ -3,6 +3,8 @@ import 'package:ishara/core/utils/app_text_style.dart';
 
 AppBar buildAppBar(BuildContext context, {required String text, bool isBack = true}) {
     return AppBar(
+      
+      backgroundColor: Colors.transparent,
       centerTitle: true,
       title: Text(text,style: TextStyles.semiBold24,),
       leading: isBack ? IconButton(

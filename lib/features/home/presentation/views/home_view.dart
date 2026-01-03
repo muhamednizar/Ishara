@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:ishara/core/utils/app_color.dart';
 import 'package:ishara/core/widgets/custom_home_app_bar.dart';
-import 'package:ishara/features/home/presentation/views/widget/home_view_body.dart';
+import 'package:ishara/features/home/presentation/views/widgets/home_view_body.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -24,10 +24,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // 1. هذه الخاصية تجعل المحتوى يملأ الشاشة خلف البار (مهم لجمال التصميم)
-      extendBody: true, 
-      
-      appBar: buildCustomHomeAppBar(isBack: false, context: context),
+      appBar: buildCustomHomeAppBar(isBack: false, isFav: true, context: context),
       body: _pages[_selectedIndex],
       
       bottomNavigationBar: Container(

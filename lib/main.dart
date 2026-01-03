@@ -17,6 +17,7 @@ class IsharaApp extends StatelessWidget {
           backgroundColor: AppColors.primaryColorLight,
           elevation: 0,
           centerTitle: true,
+          
         ),
         scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Inter',

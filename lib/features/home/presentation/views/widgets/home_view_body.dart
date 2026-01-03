@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ishara/core/utils/app_text_style.dart';
-import 'package:ishara/features/home/presentation/views/widget/video_item.dart';
+import 'package:ishara/features/home/presentation/views/widgets/video_item.dart';
 
 class HomeViewBody extends StatelessWidget {
   const HomeViewBody({super.key});
