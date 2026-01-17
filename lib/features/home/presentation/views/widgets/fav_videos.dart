@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:ishara/core/widgets/custom_home_app_bar.dart';
 import 'package:ishara/features/home/presentation/views/widgets/video_item.dart';
 
-class FavVideosViewBody extends StatelessWidget {
-  const FavVideosViewBody({super.key});
+class FavVideos extends StatelessWidget {
+  const FavVideos({super.key});
+  static const String routeName = 'fav_videos';
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
+    return Scaffold(
+      appBar: buildCustomHomeAppBar(isBack: true, context: context),
+      body : GridView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       itemCount: 10,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -18,6 +22,7 @@ class FavVideosViewBody extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return const Center(child: VideoItemWidget());
       },
+    ),
     );
   }
 }

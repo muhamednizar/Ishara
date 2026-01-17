@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ishara/core/utils/app_text_style.dart';
-import 'package:ishara/features/home/presentation/views/fav_videos_view.dart';
+import 'package:ishara/features/home/presentation/views/widgets/fav_videos.dart';
 
 AppBar buildCustomHomeAppBar(
     {bool isBack = true, bool isFav = false, required BuildContext context, String? title}) {
@@ -50,7 +50,7 @@ AppBar buildCustomHomeAppBar(
               child: Center(
                 child: IconButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, FavVideosView.routeName);
+                    Navigator.pushNamed(context, FavVideos.routeName);
                   },
                   icon: Icon(Icons.star_border, color: Colors.white),
                   padding: EdgeInsets.zero,
