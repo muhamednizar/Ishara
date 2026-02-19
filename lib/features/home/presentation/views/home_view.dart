@@ -3,6 +3,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:ishara/core/utils/app_color.dart';
 import 'package:ishara/core/widgets/custom_home_app_bar.dart';
 import 'package:ishara/features/home/presentation/views/widgets/home_view_body.dart';
+import 'package:ishara/features/settings/presentation/views/settings_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -18,7 +19,7 @@ class _HomeViewState extends State<HomeView> {
   static const List<Widget> _pages = <Widget>[
     HomeViewBody(),
     Center(child: Text('Camera Page')),
-    Center(child: Text('Profile Page')),
+    SettingsView(),
   ];
 
   @override

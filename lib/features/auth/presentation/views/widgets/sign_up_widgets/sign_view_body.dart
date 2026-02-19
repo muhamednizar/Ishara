@@ -6,8 +6,6 @@ import 'package:ishara/core/widgets/custom_text__form_field.dart';
 import 'package:ishara/features/auth/presentation/views/login_view.dart';
 import 'package:ishara/features/auth/presentation/views/widgets/login_widgets/build_or_widget.dart'; // تأكد من المسار
 
-// افترضت أن لديك راوت لصفحة اللوجين، لو لم يكن موجوداً استبدله بالاسم الصحيح
-// import 'package:ishara/features/auth/presentation/login_view.dart'; 
 
 class SignUpViewBody extends StatefulWidget {
   const SignUpViewBody({super.key});
@@ -17,7 +15,7 @@ class SignUpViewBody extends StatefulWidget {
 }
 
 class _SignUpViewBodyState extends State<SignUpViewBody> {
-  bool isTermsAccepted = false; // غيرنا الاسم ليعبر عن الموافقة على الشروط
+  bool isTermsAccepted = false; 
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +27,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
           children: [
             const SizedBox(height: 24),
             
-            // --- حقل الاسم الكامل (جديد) ---
+            // --- الاسم الكامل ---
             Text(
               'Full Name',
               style: TextStyles.bold16,
@@ -42,7 +40,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
             
             const SizedBox(height: 24),
 
-            // --- حقل الإيميل ---
+            // ---  الإيميل ---
             Text(
               'Email address',
               style: TextStyles.bold16,
@@ -55,7 +53,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
             
             const SizedBox(height: 24),
 
-            // --- حقل الباسورد ---
+            // ---  الباسورد ---
             Text(
               'Password',
               style: TextStyles.bold16,
@@ -64,12 +62,11 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
             CustomTextFormField(
               hintText: 'Password',
               obscureText: true,
-              // يمكنك إضافة أيقونة لإظهار/إخفاء الباسورد هنا لاحقاً
             ),
             
             const SizedBox(height: 16),
 
-            // --- الموافقة على الشروط والأحكام ---
+            // ---   الشروط والأحكام ---
             Row(
               children: [
                 Checkbox(
@@ -86,8 +83,8 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                 ),
-                const SizedBox(width: 8), // مسافة صغيرة
-                Expanded( // استخدمنا Expanded لتجنب الخطأ لو النص طويل
+                const SizedBox(width: 8), 
+                Expanded( 
                   child: Text.rich(
                     TextSpan(
                       children: [
@@ -101,7 +98,6 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                             color: AppColors.primaryColor, // تلوين الرابط
                             decoration: TextDecoration.underline,
                           ),
-                          // يمكنك إضافة GestureDetector هنا لفتح الشروط
                         ),
                       ],
                     ),
@@ -115,7 +111,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
             // --- زر إنشاء الحساب ---
             Center(
               child: CustomButton(
-                text: 'Create Account', // غيرنا النص
+                text: 'Create Account',
                 onPressed: () {
                   
                 },
@@ -125,13 +121,12 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
             ),
 
             const SizedBox(height: 16),
-            const OrDivider(), // تأكدنا من أنها const
+            const OrDivider(), 
             const SizedBox(height: 16),
           
 
             const SizedBox(height: 16),
 
-            // --- الرابط للعودة لتسجيل الدخول ---
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -141,7 +136,6 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                 ),
                 TextButton(
                   onPressed: () {
-                    // العودة لصفحة اللوجين
                   Navigator.pushNamed(context, LoginView.routeName);
                   }, child: Text(
                     'Log In',
@@ -151,7 +145,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                 ),
               ],
             ),
-            const SizedBox(height: 24), // مسافة إضافية في الأسفل
+            const SizedBox(height: 24), 
           ],
         ),
       ),
