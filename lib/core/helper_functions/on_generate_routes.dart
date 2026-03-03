@@ -22,28 +22,28 @@ Route<dynamic>? Function(RouteSettings settings) onGenerateRoute = (settings) {
     return MaterialPageRoute(builder: (context) => SignUp());
     case LoginSuccessful.routeName:
     return MaterialPageRoute(builder: (context) => LoginSuccessful());
-    case FavVideos.routeName:
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => const FavVideos(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) => SlideTransition(
-        position: Tween<Offset>(
-          begin: Offset(1, 0),
-          end: Offset.zero,
-        ).animate(animation),
-        child: child,
-      ),
-    );
-    case VideoDetails.routeName:
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => const VideoDetails(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) => SlideTransition(
-        position: Tween<Offset>(
-          begin: Offset(1, 0),
-          end: Offset.zero,
-        ).animate(animation),
-        child: child,
-      ),
-    );
+    // case FavVideos.routeName:
+    // return PageRouteBuilder(
+    //   pageBuilder: (context, animation, secondaryAnimation) => const FavVideos(),
+    //   transitionsBuilder: (context, animation, secondaryAnimation, child) => SlideTransition(
+    //     position: Tween<Offset>(
+    //       begin: Offset(1, 0),
+    //       end: Offset.zero,
+    //     ).animate(animation),
+    //     child: child,
+    //   ),
+    // );
+    // case VideoDetails.routeName:
+    // return PageRouteBuilder(
+    //   pageBuilder: (context, animation, secondaryAnimation) => const VideoDetails(),
+    //   transitionsBuilder: (context, animation, secondaryAnimation, child) => SlideTransition(
+    //     position: Tween<Offset>(
+    //       begin: Offset(1, 0),
+    //       end: Offset.zero,
+    //     ).animate(animation),
+    //     child: child,
+    //   ),
+    // );
     default:
       return null;
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ishara/api_video/video_grid.dart';
 import 'package:ishara/core/utils/app_text_style.dart';
-import 'package:ishara/features/home/presentation/views/widgets/video_item.dart';
+
 
 class HomeViewBody extends StatelessWidget {
   const HomeViewBody({super.key});
@@ -8,17 +9,15 @@ class HomeViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
-      // slivers هي القائمة التي تقبل عناصر من نوع Sliver فقط
+      physics: AlwaysScrollableScrollPhysics(),
       slivers: [
-        // --- 1. الجزء العلوي (البنرات + العنوان) ---
-        // نضعهم في SliverToBoxAdapter لأنهم عناصر عادية لها طول محدد
+        // --- الجزء العلوي (البنرات + عنوان Videos) ---
         SliverToBoxAdapter(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 24),
-
-              // البنرات (Scroll أفقي داخل Scroll عمودي)
+              // البنرات
               SizedBox(
                 height: 150,
                 child: ListView.builder(
@@ -33,8 +32,7 @@ class HomeViewBody extends StatelessWidget {
                         color: Colors.red.withValues(alpha: 0.8),
                         borderRadius: BorderRadius.circular(16),
                         image: const DecorationImage(
-                          image: NetworkImage(
-                              "https://via.placeholder.com/300x150"),
+                          image: NetworkImage("https://via.placeholder.com/300x150"),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -42,9 +40,7 @@ class HomeViewBody extends StatelessWidget {
                   },
                 ),
               ),
-
               const SizedBox(height: 24),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
@@ -52,26 +48,22 @@ class HomeViewBody extends StatelessWidget {
                   style: TextStyles.semiBold24.copyWith(fontSize: 20),
                 ),
               ),
-
               const SizedBox(height: 16),
             ],
           ),
         ),
+
+        // --- 2. استدعاء الفيديوهات هنا ---
+        // بما إن الـ VideoGridScreen بترجع GridView، هنلفها بـ SliverToBoxAdapter 
+        // ونحدد لها طول ثابت (Height) عشان الـ Scroll العام يشتغل صح
         SliverToBoxAdapter(
           child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.22,
-            width: MediaQuery.of(context).size.width,
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              itemCount: 10,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return const VideoItemWidget();
-              },
-            ),
+            height: 250, // يمكنك تعديل الارتفاع حسب ما تراه مناسباً
+            child:  VideoGridScreen(),
           ),
         ),
-        // --- 3. أي عناصر أخرى في الأسفل ---
+
+       // --- 3. بقية العناصر (Sign language) ---
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
@@ -79,14 +71,12 @@ class HomeViewBody extends StatelessWidget {
                 style: TextStyles.semiBold24.copyWith(fontSize: 20)),
           ),
         ),
-        SliverToBoxAdapter(
-          child: SizedBox(height: 10),
-        ),
+        
+        SliverToBoxAdapter(child: const SizedBox(height: 10)),
 
         SliverToBoxAdapter(
           child: SizedBox(
             height: 132,
-            width: 343,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -105,9 +95,8 @@ class HomeViewBody extends StatelessWidget {
             ),
           ),
         ),
-      SliverToBoxAdapter(
-          child: SizedBox(height: 100),
-        ),
+
+        SliverToBoxAdapter(child: const SizedBox(height: 10)),
       ],
     );
   }

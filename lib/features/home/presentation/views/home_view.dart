@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:ishara/api_video/custom_appbar.dart';
+import 'package:ishara/api_video/favorite_screen.dart';
 import 'package:ishara/core/utils/app_color.dart';
-import 'package:ishara/core/widgets/custom_home_app_bar.dart';
 import 'package:ishara/features/home/presentation/views/widgets/home_view_body.dart';
 import 'package:ishara/features/settings/presentation/views/settings_view.dart';
 
@@ -16,38 +17,74 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _pages = <Widget>[
-    HomeViewBody(),
-    Center(child: Text('Camera Page')),
-    SettingsView(),
-  ];
+  // 1. المفتاح السحري اللي هيخلي صفحة الهوم تتحدث
+  Key homeKey = UniqueKey();
+
+  // 2. دالة الـ Refresh اللي بتشتغل لما تشد الشاشة
+  Future<void> _handleRefresh() async {
+    setState(() {
+      // تغيير الـ Key بيجبر فلاتر يمسح صفحة الهوم القديمة ويبنيها من جديد بالداتا الجديدة
+      homeKey = UniqueKey();
+    });
+    // بنستنى ثانية عشان المستخدم يشوف علامة الرفريش وهي بتلف
+    await Future.delayed(const Duration(seconds: 1));
+  }
 
   @override
   Widget build(BuildContext context) {
+    // 3. القائمة حطيناها جوه الـ build عشان تستقبل الـ homeKey المتغير
+    final List<Widget> _pages = <Widget>[
+      HomeViewBody(key: homeKey), // هنا ربطنا المفتاح بالبودي
+      const Center(child: Text('Camera Page')),
+      const SettingsView(),
+    ];
+
     return Scaffold(
-      appBar: buildCustomHomeAppBar(isBack: false, isFav: true, context: context),
-      body: _pages[_selectedIndex],
+      backgroundColor: Colors.white,
+      appBar: CustomAppBar(
+        title: 'Introductory Videos',
+        showBackButton: false,
+        trailing: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FavoriteScreen()),
+            ).then((_) => setState(() {}));
+          },
+          child: const CircleAvatar(
+            backgroundColor: Color(0xFF1976D2),
+            radius: 18,
+            child: Icon(Icons.star, color: Colors.white, size: 18),
+          ),
+        ),
+      ),
+      
+      // 4. تغليف البادي بالرفريش (هيظهر بس لو احنا في صفحة الهوم)
+      body: _selectedIndex == 0 
+          ? RefreshIndicator(
+              onRefresh: _handleRefresh,
+              color: AppColors.primaryColor, // لون العلامة اللي بتلف
+              backgroundColor: Colors.white,
+              child: _pages[_selectedIndex],
+            )
+          : _pages[_selectedIndex],
       
       bottomNavigationBar: Container(
-      
-        // إضافة هوامش لجعل البار يبدو معلقاً (اختياري)
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(24),
           ),
-          // 2. الظل هو الذي سيظهر التدوير
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.2), // لون الظل
+              color: Colors.grey.withValues(alpha: 0.2),
               spreadRadius: 5,
               blurRadius: 10,
-              offset: const Offset(0, -3), // اتجاه الظل للأعلى قليلاً
+              offset: const Offset(0, -3),
             ),
           ],
         ),
-        // 3. ClipRRect يقص العناصر التي تخرج عن الحواف الدائرية
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
           child: GNav(

@@ -30,6 +30,7 @@ class OnBoardingPageViewBody extends StatelessWidget {
           buttonText: 'Start',
           onPressed: () {
             Navigator.pushNamed(context, LoginView.routeName);
+            
           }
         ),
       ],
