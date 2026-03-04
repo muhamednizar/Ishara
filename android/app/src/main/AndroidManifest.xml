@@ -1,4 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- للصلاحيات على الإصدارات القديمة -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- للإصدارات الجديدة (Android 13+) في حال احتاجها الـ plugin -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
     <application
         android:label="ishara"
         android:name="${applicationName}"
