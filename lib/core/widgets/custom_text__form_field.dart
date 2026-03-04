@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:ishara/core/utils/app_color.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField({super.key, required this.hintText, this.suffixIcon, this.obscureText = false, this.keyboardType, this.onSaved});
+  const CustomTextFormField({super.key, required this.hintText, this.suffixIcon, this.obscureText = false, this.keyboardType, this.onSaved, this.controller});
   final String hintText;
   final Widget? suffixIcon;
   final bool obscureText;
   final TextInputType? keyboardType;
   final void Function(String?)? onSaved;
+  final TextEditingController? controller;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,6 +23,7 @@ class CustomTextFormField extends StatelessWidget {
       ),
       child: TextFormField(
         
+        controller: controller,
         cursorColor: AppColors.primaryColor,
         onSaved: onSaved,
         validator: (value) {

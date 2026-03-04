@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ishara/core/services/auth_gate.dart';
 import 'package:ishara/core/utils/app_images.dart';
 import 'package:ishara/features/auth/presentation/views/login_view.dart';
 import 'package:ishara/features/on_boarding/presentation/views/widgets/page_view_item.dart';
@@ -29,7 +30,7 @@ class OnBoardingPageViewBody extends StatelessWidget {
           description: 'Use ready-made signs and symbols to communicate instantly.',
           buttonText: 'Start',
           onPressed: () {
-            Navigator.pushNamed(context, LoginView.routeName);
+            Navigator.pushNamed(context, AuthGate.routeName);
           }
         ),
       ],

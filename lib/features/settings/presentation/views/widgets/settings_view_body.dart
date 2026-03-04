@@ -1,19 +1,24 @@
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:ishara/core/services/auth_gate.dart';
+import 'package:ishara/core/services/firbase_auth_services.dart';
+import 'package:ishara/features/settings/presentation/views/widgets/edit_profile.dart';
 import 'package:ishara/features/settings/presentation/views/widgets/settings_options.dart';
 
 class SettingsViewBody extends StatelessWidget {
-  SettingsViewBody({super.key});
+  const SettingsViewBody({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      
       children: [
-
         SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Center(child: SettingsOptions(icon: Icons.person, title: 'Profile')),
+        GestureDetector(
+          onTap: () => Navigator.pushNamed(context, EditProfile.routeName),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Center(child: SettingsOptions(icon: Icons.person, title: 'Profile')),
+          ),
         ),
         SizedBox(height: 16),
         Padding(
@@ -26,9 +31,16 @@ class SettingsViewBody extends StatelessWidget {
           child: Center(child: SettingsOptions(icon: Icons.help, title: 'Help')),
         ),
         SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Center(child: SettingsOptions(icon: Icons.logout, title: 'Logout')),
+        GestureDetector(
+          onTap: () async {
+            await FirebaseAuthServices().signOut();
+            if (!context.mounted) return;
+            Navigator.pushNamed(context, AuthGate.routeName);
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Center(child: SettingsOptions(icon: Icons.logout, title: 'Logout')),
+          ),
         ),
       ],
     );

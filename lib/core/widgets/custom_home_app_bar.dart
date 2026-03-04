@@ -31,7 +31,7 @@ AppBar buildCustomHomeAppBar(
           )
         : SizedBox.shrink(),
     title: Text(
-      'Introductory Videos',
+       title ?? 'Introductory Videos',
       style: MediaQuery.of(context).size.width > 600
           ? TextStyles.semiBold24.copyWith(color: Colors.white)
           : TextStyles.semiBold24.copyWith(color: Colors.white, fontSize: 20),

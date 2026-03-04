@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ishara/core/services/auth_gate.dart';
 import 'package:ishara/core/utils/app_text_style.dart';
 import 'package:ishara/core/widgets/custom_button.dart';
 import 'package:ishara/features/auth/presentation/views/login_view.dart';
@@ -37,7 +38,7 @@ class PageViewItem extends StatelessWidget {
                   maintainState: true,
                   maintainAnimation: true,
                   child: GestureDetector(onTap: () {
-                    Navigator.pushNamed(context, LoginView.routeName);
+                    Navigator.pushNamed(context, AuthGate.routeName);
                   }, child: Text('Skip', style: TextStyles.semiBold24))),
             ],
           ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ishara/core/services/auth_gate.dart';
 import 'package:ishara/features/auth/presentation/views/login_view.dart';
 import 'package:ishara/features/auth/presentation/views/sign_up_view.dart';
 import 'package:ishara/features/auth/presentation/views/widgets/login_widgets/login_successful.dart';
@@ -7,6 +9,8 @@ import 'package:ishara/features/home/presentation/views/widgets/fav_videos.dart'
 import 'package:ishara/features/home/presentation/views/widgets/video_details.dart';
 import 'package:ishara/features/on_boarding/presentation/views/on_boarding_view.dart';
 import 'package:ishara/features/splash/presentation/views/splash_view.dart';
+import 'package:ishara/features/settings/presentation/views/widgets/cubit/profile_edit_cubit.dart';
+import 'package:ishara/features/settings/presentation/views/widgets/edit_profile.dart';
 
 Route<dynamic>? Function(RouteSettings settings) onGenerateRoute = (settings) {
   switch (settings.name) {
@@ -44,6 +48,15 @@ Route<dynamic>? Function(RouteSettings settings) onGenerateRoute = (settings) {
         child: child,
       ),
     );
+    case EditProfile.routeName:
+      return MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (_) => ProfileEditCubit(),
+          child: EditProfile(),
+        ),
+      );
+    case AuthGate.routeName:
+    return MaterialPageRoute(builder: (context) => AuthGate());
     default:
       return null;
   }
