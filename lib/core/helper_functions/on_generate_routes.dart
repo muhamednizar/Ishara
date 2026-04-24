@@ -25,7 +25,7 @@ Route<dynamic>? Function(RouteSettings settings) onGenerateRoute = (settings) {
     case SignUp.routeName:
     return MaterialPageRoute(builder: (context) => SignUp());
     case LoginSuccessful.routeName:
-    return MaterialPageRoute(builder: (context) => LoginSuccessful());
+    return MaterialPageRoute(builder: (context) => const LoginSuccessful());
     case FavVideos.routeName:
     return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => const FavVideos(),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ishara/core/services/firbase_auth_services.dart';
+import 'package:ishara/core/services/local_auth_service.dart';
 import 'package:ishara/core/widgets/custom_app_bar.dart';
 import 'package:ishara/features/auth/data/repo/auth_repo_impl.dart';
 import 'package:ishara/features/auth/presentation/cubits/sign_up_cubit.dart';
@@ -15,8 +15,7 @@ class SignUp extends StatelessWidget {
       appBar: buildAppBar(context, text: 'Sign Up'),
       body: BlocProvider(
           create: (_) => SignUpCubit(
-              authRepo:
-                  AuthRepoImpl(firebaseAuthServices: FirebaseAuthServices())),
+              authRepo: AuthRepoImpl(authService: LocalAuthService())),
           child: SignUpViewBodyBlocConsumer()),
     );
   }

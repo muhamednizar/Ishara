@@ -1,51 +1,55 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:meta/meta.dart';
+
+import 'package:ishara/core/services/local_session_service.dart';
 
 part 'profile_edit_state.dart';
 
 class ProfileEditCubit extends Cubit<ProfileEditState> {
   ProfileEditCubit() : super(ProfileEditInitial());
+
   Future<void> editProfileName(String name) async {
     emit(ProfileEditNameLoading());
-    try{
-      await FirebaseAuth.instance.currentUser?.updateDisplayName(name);
+    try {
+      final session = await LocalSessionService.instance.readSession();
+      if (session == null) {
+        emit(ProfileEditNameFailure(error: 'Not signed in'));
+        return;
+      }
+      await LocalSessionService.instance.updateDisplayName(name);
       emit(ProfileEditNameSuccess());
-
-    }on FirebaseAuthException catch (e) {
-      emit(ProfileEditNameFailure(error: e.message ?? 'An error occurred'));
     } catch (e) {
       emit(ProfileEditNameFailure(error: e.toString()));
     }
   }
 
+  /// حفظ مسار الصورة محليًا (بدون رفع لسيرفر).
   Future<void> uploadProfilePicture(String path) async {
     emit(ProfileEditPictureLoading());
     try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        throw Exception('No logged-in user');
+      final session = await LocalSessionService.instance.readSession();
+      if (session == null) {
+        emit(ProfileEditPictureFailure(error: 'Not signed in'));
+        return;
       }
-
-      final ref = FirebaseStorage.instance
-          .ref()
-          .child('profile_pictures')
-          .child('${user.uid}.jpg');
-
-      final uploadTaskSnapshot = await ref.putFile(File(path));
-
-      // الحصول على رابط الصورة وتحديث photoURL في FirebaseAuth
-      final downloadUrl = await uploadTaskSnapshot.ref.getDownloadURL();
-      await user.updatePhotoURL(downloadUrl);
-
+      final file = File(path);
+      if (!await file.exists()) {
+        emit(ProfileEditPictureFailure(error: 'Image file not found'));
+        return;
+      }
+      await LocalSessionService.instance.saveSession(
+        LocalUserSession(
+          id: session.id,
+          name: session.name,
+          email: session.email,
+          photoPath: path,
+        ),
+      );
       emit(ProfileEditPictureSuccess());
     } catch (e) {
       emit(ProfileEditPictureFailure(error: e.toString()));
     }
   }
 }
-
-

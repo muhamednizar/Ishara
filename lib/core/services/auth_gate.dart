@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ishara/core/services/local_session_service.dart';
 import 'package:ishara/features/auth/presentation/views/login_view.dart';
 import 'package:ishara/features/auth/presentation/views/widgets/login_widgets/login_successful.dart';
 
@@ -10,14 +10,18 @@ class AuthGate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
+      body: StreamBuilder<bool>(
+        stream: LocalSessionService.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return LoginSuccessful();
-          } else {
-            return LoginView();
+          if (snapshot.connectionState == ConnectionState.waiting &&
+              !snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
           }
+          final loggedIn = snapshot.data ?? false;
+          if (loggedIn) {
+            return const LoginSuccessful();
+          }
+          return const LoginView();
         },
       ),
     );

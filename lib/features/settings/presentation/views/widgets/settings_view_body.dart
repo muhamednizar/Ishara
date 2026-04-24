@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ishara/core/services/auth_gate.dart';
-import 'package:ishara/core/services/firbase_auth_services.dart';
+import 'package:ishara/core/services/local_auth_service.dart';
 import 'package:ishara/features/settings/presentation/views/widgets/edit_profile.dart';
 import 'package:ishara/features/settings/presentation/views/widgets/settings_options.dart';
 
@@ -33,7 +33,7 @@ class SettingsViewBody extends StatelessWidget {
         SizedBox(height: 16),
         GestureDetector(
           onTap: () async {
-            await FirebaseAuthServices().signOut();
+            await LocalAuthService().signOut();
             if (!context.mounted) return;
             Navigator.pushNamed(context, AuthGate.routeName);
           },
