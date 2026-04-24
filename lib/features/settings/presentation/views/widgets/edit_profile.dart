@@ -1,7 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ishara/core/services/local_session_service.dart';
 import 'package:ishara/core/widgets/custom_button.dart';
 import 'package:ishara/core/widgets/custom_home_app_bar.dart';
 import 'package:ishara/core/widgets/custom_text__form_field.dart';
@@ -17,6 +19,26 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   final TextEditingController _fullNameController = TextEditingController();
+  String? _displayName;
+  String? _photoPath;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSession();
+  }
+
+  Future<void> _loadSession() async {
+    final session = await LocalSessionService.instance.readSession();
+    if (!mounted) return;
+    setState(() {
+      _displayName = session?.name;
+      _photoPath = session?.photoPath;
+      if (_displayName != null && _displayName!.isNotEmpty) {
+        _fullNameController.text = _displayName!;
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -34,6 +56,7 @@ class _EditProfileState extends State<EditProfile> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Profile updated successfully')),
           );
+          _loadSession();
         }
         if (state is ProfileEditNameFailure) {
           if (!context.mounted) return;
@@ -46,7 +69,7 @@ class _EditProfileState extends State<EditProfile> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Profile picture updated')),
           );
-          setState(() {});
+          _loadSession();
         }
         if (state is ProfileEditPictureFailure) {
           if (!context.mounted) return;
@@ -61,14 +84,12 @@ class _EditProfileState extends State<EditProfile> {
         body: Column(
           children: [
             const SizedBox(height: 24),
-            Builder(builder: (context) {
-              final photoUrl = FirebaseAuth.instance.currentUser?.photoURL;
-              return CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.grey,
-                backgroundImage: (photoUrl != null && photoUrl.isNotEmpty)
-                    ? NetworkImage(photoUrl)
-                    : null,
+            CircleAvatar(
+              radius: 50,
+              backgroundColor: Colors.grey,
+              backgroundImage: _photoPath != null && _photoPath!.isNotEmpty
+                  ? FileImage(File(_photoPath!))
+                  : null,
               child: IconButton(
                 onPressed: () async {
                   try {
@@ -77,7 +98,9 @@ class _EditProfileState extends State<EditProfile> {
                     );
 
                     if (pickedFile != null) {
-                      context.read<ProfileEditCubit>().uploadProfilePicture(pickedFile.path);
+                      context
+                          .read<ProfileEditCubit>()
+                          .uploadProfilePicture(pickedFile.path);
                     }
                   } catch (e) {
                     if (!context.mounted) return;
@@ -93,15 +116,13 @@ class _EditProfileState extends State<EditProfile> {
                   color: Colors.white,
                 ),
               ),
-              );
-            }),
+            ),
             const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: CustomTextFormField(
                 controller: _fullNameController,
-                hintText: FirebaseAuth.instance.currentUser?.displayName ??
-                    'Full Name',
+                hintText: _displayName ?? 'Full Name',
                 keyboardType: TextInputType.name,
                 suffixIcon: Icon(
                   Icons.edit_outlined,
@@ -119,8 +140,7 @@ class _EditProfileState extends State<EditProfile> {
                   text: 'Save',
                   onPressed: () {
                     final newName = _fullNameController.text.trim();
-                    final currentName =
-                        FirebaseAuth.instance.currentUser?.displayName ?? '';
+                    final currentName = _displayName ?? '';
                     if (newName != currentName) {
                       context.read<ProfileEditCubit>().editProfileName(newName);
                     } else {
