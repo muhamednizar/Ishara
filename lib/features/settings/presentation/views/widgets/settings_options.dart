@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ishara/core/utils/app_color.dart';
+import 'package:ishara/core/utils/styles.dart';
 
 class SettingsOptions extends StatelessWidget {
   SettingsOptions({super.key, required this.icon, required this.title});
@@ -8,21 +8,30 @@ class SettingsOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       height: 50,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.primaryColorLight, width: 1.2),
+        border:
+            Border.all(color: theme.dividerColor.withOpacity(0.7), width: 1.2),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(icon, size: 24, color: AppColors.primaryColor),
-          Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          Icon(Icons.arrow_forward_ios, size: 24, color: AppColors.primaryColor),
-    
+          Icon(icon, size: 24, color: theme.colorScheme.primary),
+          Text(
+            title,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
+          Icon(Icons.arrow_forward_ios,
+              size: 24, color: theme.colorScheme.primary),
         ],
       ),
     );

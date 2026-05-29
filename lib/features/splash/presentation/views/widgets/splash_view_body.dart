@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:ishara/core/utils/app_color.dart';
-import 'package:ishara/core/utils/app_images.dart';
+import 'package:ishara/core/services/local_session_service.dart';
+import 'package:ishara/core/utils/styles.dart';
+import 'package:ishara/core/utils/assets.dart';
 import 'package:ishara/features/on_boarding/presentation/views/on_boarding_view.dart';
+import 'package:ishara/features/home/presentation/views/home_view.dart';
+import 'package:ishara/features/auth/presentation/views/login_view.dart';
 
 class SplashViewBody extends StatefulWidget {
   const SplashViewBody({super.key});
@@ -50,7 +53,7 @@ class _SplashViewBodyState extends State<SplashViewBody> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(AppImages.splashLogo),
+              SvgPicture.asset(AssetsData.splashLogo),
               SizedBox(width: 10),
             ],
           ),
@@ -62,7 +65,7 @@ class _SplashViewBodyState extends State<SplashViewBody> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                SvgPicture.asset(AppImages.signSplash),
+                SvgPicture.asset(AssetsData.signSplash),
                 SizedBox(width: 70),
               ],
             ),
@@ -75,7 +78,7 @@ class _SplashViewBodyState extends State<SplashViewBody> {
             transform: Matrix4.translationValues(0, wordOffsetY, 0),
             child: Column(
               children: [
-                SvgPicture.asset(AppImages.wordSplash),
+                SvgPicture.asset(AssetsData.wordSplash),
                 SizedBox(height: 20),
               ],
             ),
@@ -85,8 +88,31 @@ class _SplashViewBodyState extends State<SplashViewBody> {
     );
   }
 }
-void executeNavigateToHome(BuildContext context) {
-  Future.delayed(Duration(milliseconds: 2472), () {
-    Navigator.pushReplacementNamed(context, OnBoardingView.routeName);
+void executeNavigateToHome(BuildContext context) async {
+  final session = LocalSessionService.instance;
+  
+  // هل دي أول مرة يفتح التطبيق؟
+  bool firstTime = await session.isFirstTime();
+  // هل هو مسجل دخول حالياً؟
+  bool loggedIn = await session.isLoggedIn();
+  // هل هو كان معلم على "Remember Me"؟
+  bool rememberMe = await session.shouldRemember();
+
+  Future.delayed(const Duration(milliseconds: 2472), () async {
+    if (!context.mounted) return;
+
+    if (firstTime) {
+      Navigator.pushReplacementNamed(context, OnBoardingView.routeName);
+    }
+    // هنا بقى السر:
+    // لو هو مسجل دخول (loggedIn) وكمان كان معلم على (rememberMe) يدخل عل طول
+    else if (loggedIn && rememberMe) {
+      Navigator.pushReplacementNamed(context, HomeView.routeName);
+    } 
+    // لو مش معلم على Remember Me، بنمسح السشن ونوديه للوجن (كأنه لسه فاتح)
+    else {
+      await session.clearSession(); // امسح السشن القديمة لأنها "مؤقتة"
+      Navigator.pushReplacementNamed(context, LoginView.routeName);
+    }
   });
 }

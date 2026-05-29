@@ -1,98 +1,69 @@
-// --- VideoItemWidget يظل كما هو ---
 import 'package:flutter/material.dart';
-import 'package:ishara/core/utils/app_text_style.dart';
+import 'package:ishara/features/home/data/models/video_model.dart';
 import 'package:ishara/features/home/presentation/views/widgets/video_details.dart';
 
 class VideoItemWidget extends StatelessWidget {
-  const VideoItemWidget({super.key});
+  final VideoModel video;
+  const VideoItemWidget({super.key, required this.video});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, VideoDetails.routeName);
+        Navigator.pushNamed(context, VideoDetails.routeName, arguments: video);
       },
       child: Container(
-        // 1. قللنا العرض ليكون مناسباً للسكرول العرضي
-        width: 160,
-        margin: const EdgeInsets.only(right: 12), // مسافة بين الكروت
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.withValues(alpha: 0.2)), // إطار خفيف
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withValues(alpha: 0.1),
-              blurRadius: 5,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
+        width: 180, 
+        // 👇 ده الحل: مسافة 8 بيكسل يمين وشمال كل كارت عشان ميلزقوش في بعض
+        margin: const EdgeInsets.symmetric(horizontal: 8), 
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 2. الجزء العلوي: الصورة
             Expanded(
-              flex: 3, // تأخذ 3 أجزاء من المساحة
               child: Container(
+                width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12), // تدوير من الأعلى فقط
-                  ),
-                  image: const DecorationImage(
-                    // صورة مؤقتة
-                    image: NetworkImage("https://via.placeholder.com/160x100"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.3),
-                      shape: BoxShape.circle,
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey[200],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 5,
+                      offset: const Offset(0, 2),
                     ),
-                    child: const Icon(Icons.play_arrow,
-                        color: Colors.white, size: 30),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    video.thumbnailUrl.isNotEmpty 
+                        ? video.thumbnailUrl 
+                        : "https://via.placeholder.com/343x220",
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, progress) {
+                      if (progress == null) return child;
+                      return const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Center(
+                        child: Icon(Icons.broken_image_outlined, color: Colors.grey, size: 40),
+                      );
+                    },
                   ),
                 ),
               ),
             ),
-      
-            // 3. الجزء السفلي: النصوص
-            Expanded(
-              flex: 2, // يأخذ جزئين من المساحة
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "درس الحروف الأبجدية",
-                      maxLines: 2, // سطرين كحد أقصى
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyles.semiBold24
-                          .copyWith(fontSize: 14, color: Colors.black87),
-                    ),
-                    Row(
-                      children: [
-                        const Icon(Icons.access_time,
-                            size: 14, color: Colors.grey),
-                        const SizedBox(width: 4),
-                        Text(
-                          "10:00 دقيقة",
-                          style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                        ),
-                        const SizedBox(width: 4),
-                        Spacer(),
-                        const Icon(Icons.star_outline_sharp, size: 17, color: Colors.yellow),
-                      ],
-                    ),
-                  ],
-                ),
+            const SizedBox(height: 8),
+            Text(
+              video.title,
+              maxLines: 2, 
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold, 
+                fontSize: 14,
+                height: 1.2,
               ),
             ),
           ],

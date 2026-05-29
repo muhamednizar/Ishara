@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ishara/core/utils/app_color.dart';
-import 'package:ishara/core/utils/app_text_style.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ishara/core/utils/functions/buildErrorWidget.dart';
+import 'package:ishara/core/utils/styles.dart';
 import 'package:ishara/core/widgets/custom_button.dart';
 import 'package:ishara/core/widgets/custom_text__form_field.dart';
-import 'package:ishara/features/auth/presentation/cubits/sign_up_cubit.dart';
+import 'package:ishara/features/auth/presentation/manager/sign_up_cubit/sign_up_cubit.dart';
+import 'package:ishara/features/auth/presentation/manager/sign_up_cubit/sign_up_state.dart';
 import 'package:ishara/features/auth/presentation/views/login_view.dart';
-import 'package:ishara/features/auth/presentation/views/widgets/login_widgets/build_or_widget.dart'; // تأكد من المسار
-
+import 'package:ishara/features/auth/presentation/views/widgets/login_widgets/build_or_widget.dart';
 
 class SignUpViewBody extends StatefulWidget {
-  const SignUpViewBody({super.key});
+  // ضفنا المتغير ده عشان يستقبل حالة التحميل من الـ BlocConsumer اللي بره
+  final bool isLoading; 
+  
+  const SignUpViewBody({super.key, this.isLoading = false});
 
   @override
   State<SignUpViewBody> createState() => _SignUpViewBodyState();
@@ -22,6 +26,7 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -36,13 +41,13 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
               
               // --- الاسم الكامل ---
               Text(
-                'Full Name',
-                style: TextStyles.bold16,
+                'Full Name'.tr(),
+                style: Styles.bold16,
               ),
               const SizedBox(height: 16),
               CustomTextFormField(
                 controller: _fullNameController,
-                hintText: 'Enter your full name',
+                hintText: 'Enter your full name'.tr(),
                 keyboardType: TextInputType.name,
               ),
               
@@ -50,13 +55,13 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
           
               // ---  الإيميل ---
               Text(
-                'Email address',
-                style: TextStyles.bold16,
+                'Email address'.tr(),
+                style: Styles.bold16,
               ),
               const SizedBox(height: 16),
               CustomTextFormField(
                 controller: _emailController,
-                hintText: 'Email',
+                hintText: 'Email'.tr(),
                 keyboardType: TextInputType.emailAddress,
               ),
               
@@ -64,13 +69,13 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
           
               // ---  الباسورد ---
               Text(
-                'Password',
-                style: TextStyles.bold16,
+                'Password'.tr(),
+                style: Styles.bold16,
               ),
               const SizedBox(height: 16),
               CustomTextFormField(
                 controller: _passwordController,
-                hintText: 'Password',
+                hintText: 'Password'.tr(),
                 obscureText: true,
               ),
               
@@ -99,12 +104,12 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
                       TextSpan(
                         children: [
                           TextSpan(
-                            text: 'I agree to the ',
-                            style: TextStyles.medium16,
+                            text: 'I agree to the '.tr(),
+                            style: Styles.medium16,
                           ),
                           TextSpan(
-                            text: 'Terms & Conditions',
-                            style: TextStyles.medium16.copyWith(
+                            text: 'Terms & Conditions'.tr(),
+                            style: Styles.medium16.copyWith(
                               color: AppColors.primaryColor, // تلوين الرابط
                               decoration: TextDecoration.underline,
                             ),
@@ -120,42 +125,45 @@ class _SignUpViewBodyState extends State<SignUpViewBody> {
           
               // --- زر إنشاء الحساب ---
               Center(
-                child: CustomButton(
-                  text: 'Create Account',
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      context.read<SignUpCubit>().signUp(
-                        _fullNameController.text,
-                        _emailController.text,
-                        _passwordController.text,
-                      );
-                    }
-                  },
-                  width: 443,
-                  height: 48,
-                ),
+                // استخدمنا المتغير اللي استقبلناه من فوق بدل state is
+                child: widget.isLoading 
+                    ? const CircularProgressIndicator() 
+                    : CustomButton( 
+                        text: 'Create Account'.tr(),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            if (!isTermsAccepted) {
+                              buildErrorBar(context, 'Please agree to the Terms & Conditions'.tr());
+                              return;
+                            }
+                            context.read<SignUpCubit>().signUpUser( 
+                              name: _fullNameController.text,
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                            );
+                          }
+                        },
+                        width: 443,
+                        height: 48,
+                      ),
               ),
-          
+
               const SizedBox(height: 16),
-              const OrDivider(), 
-              const SizedBox(height: 16),
-            
-          
               const SizedBox(height: 16),
           
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Already have an account?',
-                    style: TextStyles.medium16,
+                    'Already have an account?'.tr(),
+                    style: Styles.medium16,
                   ),
                   TextButton(
                     onPressed: () {
                     Navigator.pushNamed(context, LoginView.routeName);
                     }, child: Text(
-                      'Log In',
-                      style: TextStyles.medium16.copyWith(
+                      'Log In'.tr(),
+                      style: Styles.medium16.copyWith(
                           color: AppColors.primaryColor),
                     ),
                   ),

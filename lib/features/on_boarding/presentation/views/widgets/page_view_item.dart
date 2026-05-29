@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ishara/core/services/auth_gate.dart';
-import 'package:ishara/core/utils/app_text_style.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ishara/core/utils/styles.dart';
 import 'package:ishara/core/widgets/custom_button.dart';
-import 'package:ishara/features/auth/presentation/views/login_view.dart';
+import 'package:ishara/features/on_boarding/presentation/onboarding_navigation.dart';
 
 class PageViewItem extends StatelessWidget {
   PageViewItem({
@@ -37,9 +37,10 @@ class PageViewItem extends StatelessWidget {
                   maintainSize: true,
                   maintainState: true,
                   maintainAnimation: true,
-                  child: GestureDetector(onTap: () {
-                    Navigator.pushNamed(context, AuthGate.routeName);
-                  }, child: Text('Skip', style: TextStyles.semiBold24))),
+                  child: GestureDetector(
+                    onTap: () => finishOnboarding(context),
+                    child: Text('Skip', style: Styles.semiBold24),
+                  )),
             ],
           ),
           const SizedBox(height: 25),
@@ -50,21 +51,21 @@ class PageViewItem extends StatelessWidget {
           ),
           const SizedBox(height: 37),
           Text(
-            title,
-            style: TextStyles.semiBold24,
+            title.tr(),
+            style: Styles.semiBold24,
           ),
           const SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
-              description,
-              style: TextStyles.medium16,
+              description.tr(),
+              style: Styles.medium16,
               textAlign: TextAlign.center,
             ),
           ),
           const Spacer(),
           CustomButton(
-            text: buttonText,
+            text: buttonText.tr(),
             onPressed: onPressed ?? () {},
             width: 343,
             height: 48,

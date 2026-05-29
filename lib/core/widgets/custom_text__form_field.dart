@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ishara/core/utils/app_color.dart';
+import 'package:ishara/core/utils/styles.dart';
 
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({super.key, required this.hintText, this.suffixIcon, this.obscureText = false, this.keyboardType, this.onSaved, this.controller});
@@ -43,7 +43,7 @@ class CustomTextFormField extends StatelessWidget {
         obscureText: obscureText,
         keyboardType: keyboardType,
         decoration: InputDecoration(
-          // hintStyle: TextStyles.bold16.copyWith(color: AppColors.hintColor),
+          // hintStyle: Styles.bold16.copyWith(color: AppColors.hintColor),
           filled: true,
           fillColor: const Color(0xFFF9FAFA),
           hintText: hintText,

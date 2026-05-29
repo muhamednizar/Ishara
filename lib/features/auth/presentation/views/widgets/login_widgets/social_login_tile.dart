@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ishara/core/utils/app_color.dart';
-import 'package:ishara/core/utils/app_text_style.dart';
+import 'package:ishara/core/utils/styles.dart';
 
 class CustomSocialLoginTile extends StatelessWidget {
   const CustomSocialLoginTile({super.key, required this.title, required this.image, required this.onTap});
@@ -11,7 +10,7 @@ class CustomSocialLoginTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       
-      title: Center(child: Text(title,style: TextStyles.semiBold16.copyWith(color: Colors.black),)),
+      title: Center(child: Text(title,style: Styles.semiBold16.copyWith(color: Colors.black),)),
       leading: Image.asset(image),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ishara/core/utils/app_color.dart';
-import 'package:ishara/core/utils/app_text_style.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:ishara/core/utils/styles.dart';
 
 class OrDivider extends StatelessWidget {
   const OrDivider({
@@ -16,9 +16,8 @@ class OrDivider extends StatelessWidget {
           color: AppColors.primaryColor,
         )),
         const SizedBox(width: 20),
-        Text('Or Log in with',
-            style: TextStyles.semiBold16
-                .copyWith(color: Colors.black)),
+        Text('Or Log in with'.tr(),
+            style: Styles.semiBold16.copyWith(color: Colors.black)),
         const SizedBox(width: 20),
         Expanded(
             child: Divider(
