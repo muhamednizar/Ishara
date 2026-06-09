@@ -9,7 +9,6 @@ class AppColors {
   static Color secondaryColor = const Color(0xFFE6E9EA);
 }
 
-/// أنماط النصوص (نمط `Styles` في bookly-app).
 abstract class Styles {
   static const TextStyle regular16 = TextStyle(
     fontWeight: FontWeight.normal,

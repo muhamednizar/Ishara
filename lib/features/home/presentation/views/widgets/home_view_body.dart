@@ -57,7 +57,6 @@ class HomeViewBody extends StatelessWidget {
           ),
         ),
 
-        // --- 2. الفيديوهات (مربوطة بالـ Cubit) ---
         SliverToBoxAdapter(
           child: SizedBox(
             height: MediaQuery.of(context).size.height * 0.22,
@@ -102,7 +101,6 @@ class HomeViewBody extends StatelessWidget {
           child: SizedBox(height: 55),
         ),
 
-        // --- 3. لغة الإشارة (تم إضافة الـ See All هنا) ---
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.only(

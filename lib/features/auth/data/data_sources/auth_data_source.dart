@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:ishara/core/utils/api_service.dart';
 
@@ -20,7 +21,7 @@ class AuthRemoteDataSource {
       );
       return response;
     } catch (e) {
-      _handleError(e); 
+      _handleError(e);
       rethrow;
     }
   }
@@ -32,12 +33,12 @@ class AuthRemoteDataSource {
   }) async {
     try {
       final response = await _apiService.post(
-        endpoint: 'users/', 
+        endpoint: 'users/',
         data: {
           'name': name,
           'email': email,
           'password': password,
-          'username': email.split('@')[0], 
+          'username': email.split('@')[0],
         },
       );
       return response;
@@ -59,14 +60,14 @@ class AuthRemoteDataSource {
 
   Future<Map<String, dynamic>> confirmEmail({
     required int userId,
-    required String otp, 
+    required String otp,
   }) async {
     try {
       final response = await _apiService.post(
         endpoint: 'user/confirm-email/',
         data: {
           'user_id': userId,
-          'otp': int.parse(otp), 
+          'otp': int.parse(otp),
         },
       );
       return response;
@@ -76,7 +77,6 @@ class AuthRemoteDataSource {
     }
   }
 
- 
   Future<Map<String, dynamic>> resendOtp({
     required String email,
   }) async {
@@ -93,35 +93,79 @@ class AuthRemoteDataSource {
       rethrow;
     }
   }
+
 // 1. دالة طلب الـ OTP
   Future<dynamic> forgetPassword({required String email}) async {
     try {
-      return await _apiService.post(
-        endpoint: 'user/forgot-password/', 
+      debugPrint('📤 Calling API forgetPassword endpoint with email: $email');
+      final response = await _apiService.post(
+        endpoint: 'user/forgot-password/',
         data: {'email': email.trim()},
         returnErrorData: true,
       );
+      debugPrint('📥 forgetPassword API response: $response');
+      return response;
     } catch (e) {
+      debugPrint('⚠️ forgetPassword API exception: $e');
       rethrow;
     }
   }
 
   // 2. دالة تأكيد الـ OTP وتغيير الباسوورد
-  Future<void> resetPassword({
-    required String email, 
-    required String otp, 
-    required String newPassword
-  }) async {
+  Future<void> resetPassword(
+      {required String email,
+      required String otp,
+      required String newPassword}) async {
     try {
-      await _apiService.post(
-        endpoint: 'user/reset-password/', 
-        data: {
-          'email': email,
-          'otp': otp,
-          'password': newPassword,
-        },
-      );
+      debugPrint('📤 Calling API resetPassword endpoint');
+      debugPrint('   Email: $email, OTP: $otp, Password length: ${newPassword.length}');
+      
+      // محاولات متعددة مع أسماء حقول مختلفة
+      final attempts = [
+        {'password': newPassword, 'password_confirmation': newPassword},
+        {'password': newPassword, 'confirm_password': newPassword},
+        {'password': newPassword, 'password_confirm': newPassword},
+        {'new_password': newPassword, 'new_password_confirmation': newPassword},
+        {'new_password': newPassword, 'confirm_password': newPassword},
+        {'password': newPassword, 'repassword': newPassword},
+      ];
+
+      DioException? lastError;
+      
+      for (int i = 0; i < attempts.length; i++) {
+        try {
+          final data = {
+            'email': email,
+            'otp': otp,
+            ...attempts[i],
+          };
+          debugPrint('📨 Attempt ${i + 1} with data keys: ${data.keys.toList()}');
+          
+          final response = await _apiService.post(
+            endpoint: 'user/reset-password/',
+            data: data,
+            returnErrorData: false,
+          );
+          
+          debugPrint('✅ Success! resetPassword API response: $response');
+          return;
+        } on DioException catch (e) {
+          lastError = e;
+          debugPrint('❌ Attempt ${i + 1} failed: ${e.response?.data}');
+          if (i < attempts.length - 1) {
+            continue;
+          } else {
+            rethrow;
+          }
+        } catch (e) {
+          debugPrint('⚠️ Attempt ${i + 1} error: $e');
+          rethrow;
+        }
+      }
     } catch (e) {
+      debugPrint('⚠️ resetPassword API error: $e');
+      _handleError(e);
       rethrow;
     }
-  } }
+  }
+}

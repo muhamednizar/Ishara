@@ -8,8 +8,9 @@ import 'package:ishara/core/services/local_session_service.dart'; // الخدم�
 import 'package:ishara/features/auth/presentation/manager/login_cubit/login_cubit.dart';
 import 'package:ishara/features/auth/presentation/views/sign_up_view.dart';
 import 'package:ishara/features/auth/presentation/views/widgets/login_widgets/build_or_widget.dart';
-import 'package:ishara/features/auth/presentation/views/widgets/login_widgets/social_login_tile.dart';
 import 'package:ishara/features/auth/presentation/views/forget_password_view.dart';
+import 'package:ishara/features/auth/presentation/views/widgets/login_widgets/social_login_tile.dart';
+
 class LoginViewBody extends StatefulWidget {
   final bool isLoading;
   const LoginViewBody({super.key, this.isLoading = false});
@@ -85,7 +86,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, ForgetPasswordView.routeName);
+                      Navigator.pushNamed(
+                          context, ForgetPasswordView.routeName);
                     },
                     child: Text(
                       'Forgot password?'.tr(),
@@ -118,20 +120,6 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               const SizedBox(height: 16),
               const OrDivider(),
               const SizedBox(height: 16),
-              CustomSocialLoginTile(
-                  title: 'Sign in with Google Account'.tr(),
-                  image: 'assets/images/google_logo.png',
-                  onTap: () {}),
-              const SizedBox(height: 16),
-              CustomSocialLoginTile(
-                  title: 'Sign in with Facebook Account'.tr(),
-                  image: 'assets/images/facebook_logo.png',
-                  onTap: () {}),
-              const SizedBox(height: 16),
-              CustomSocialLoginTile(
-                  title: 'Sign in with Apple Account'.tr(),
-                  image: 'assets/images/apple_logo.png',
-                  onTap: () {}),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -149,6 +137,12 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                 ],
               ),
               const SizedBox(height: 16),
+              CustomSocialLoginTile(
+                title: 'Continue with Google'.tr(),
+                image: 'assets/images/google_logo.png',
+                onTap: () {
+                },
+              ),
             ],
           ),
         ),

@@ -131,11 +131,17 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                             width: double.infinity,
                             height: 48,
                             onPressed: () {
+                              debugPrint('🔐 Reset Password button pressed');
+                              debugPrint('   Email: ${widget.email}');
+                              debugPrint('   OTP: ${otpController.text}');
+                              debugPrint('   New Password length: ${passwordController.text.length}');
+                              
                               // 1. نتأكد إن الحقول مش فاضية والباسوورد متطابق
                               if (passwordController.text ==
                                       confirmPasswordController.text &&
                                   otpController.text.isNotEmpty &&
                                   passwordController.text.isNotEmpty) {
+                                debugPrint('✅ All validations passed');
                                 // 2. نبعت الداتا للكيوبيت
                                 context.read<LoginCubit>().resetPasswordWithOtp(
                                       email: widget
@@ -144,6 +150,11 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                                       newPassword: passwordController.text,
                                     );
                               } else {
+                                debugPrint('❌ Validation failed');
+                                debugPrint('   Passwords match: ${passwordController.text == confirmPasswordController.text}');
+                                debugPrint('   OTP not empty: ${otpController.text.isNotEmpty}');
+                                debugPrint('   Password not empty: ${passwordController.text.isNotEmpty}');
+                                
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                       content: Text(

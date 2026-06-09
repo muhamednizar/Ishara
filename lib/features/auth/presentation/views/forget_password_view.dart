@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
-// تأكد من المسارات دي عندك
 import 'package:ishara/core/utils/styles.dart';
 import 'package:ishara/core/widgets/custom_button.dart';
 import 'package:ishara/core/widgets/custom_text__form_field.dart';

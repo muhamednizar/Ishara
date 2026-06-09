@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ishara/core/services/auth_gate.dart';
 import 'package:ishara/core/utils/injection_container.dart';
+import 'package:ishara/core/widgets/more_Sentences.dart';
 
 // Auth Imports
 import 'package:ishara/features/auth/data/data_sources/auth_data_source.dart';
@@ -148,10 +149,13 @@ Route<dynamic>? Function(RouteSettings settings) onGenerateRoute = (settings) {
       return MaterialPageRoute(
         builder: (context) => BlocProvider.value(
           value: sl<CameraCubit>(),
-          // 🎯 تأمين مزدوج: بنجبر الـ CameraView بكل تفاصيلها والـ Widgets اللي جواها
-          // إنهم يتولدوا تحت مظلة الـ Global Cubit مباشرة
           child: const CameraView(),
         ),
+      );
+      
+      case MoreSentences.routeName:
+      return MaterialPageRoute(
+        builder:  (context) => const MoreSentences()
       );
     default:
       return MaterialPageRoute(

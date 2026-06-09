@@ -17,7 +17,7 @@ Future<Either<String, String?>> translateLetter(String imagePath) async {
       });
 
       final rawResponse = await _apiService.postForm(
-        endpoint: 'v1/YOLO/hand-tracking/', // 
+        endpoint: 'v1/YOLO/hand-tracking/', 
         data: formData,
       );
 
@@ -88,35 +88,5 @@ Future<Either<String, String?>> translateLetter(String imagePath) async {
     }
   }
 
-  /// 3. تحويل النص المترجم إلى صوت مسموع (gTTS)
-  Future<Either<String, String>> textToSpeech(String text) async {
-    try {
-      print("DEBUG: Sending text to gTTS... Text: $text");
-      
-      final rawResponse = await _apiService.post(
-        endpoint: 'v1/GTTS/text-to-speech/',
-        data: {"text": text, "language": "ar"},
-      );
 
-      Map<String, dynamic> response;
-      if (rawResponse is Map<String, dynamic>) {
-        response = rawResponse;
-      } else if (rawResponse is String) {
-        response = jsonDecode(rawResponse.trim()) as Map<String, dynamic>;
-      } else {
-        response = (rawResponse as dynamic).data as Map<String, dynamic>;
-      }
-
-      if (response['Status:'] == 'Success' || response['status'] == 'success') {
-        String? audioUrl = response['URL'] ?? response['url'];
-        if (audioUrl != null) {
-          return Right(audioUrl);
-        }
-      }
-      return const Left('فشل تحويل النص إلى صوت مسموع');
-    } catch (e) {
-      print("DEBUG: gTTS Error: ${e.toString()}");
-      return Left(e.toString());
-    }
-  }
 }

@@ -94,15 +94,5 @@ class CameraCubit extends Cubit<CameraState> {
     emit(CameraInitial());
   }
 
-  Future<void> speakText() async {
-    if (fullText.trim().isEmpty) return;
-    
-    emit(TtsLoading());
-    final result = await translationRepo.textToSpeech(fullText.trim());
-    
-    result.fold(
-      ifLeft: (error) => emit(TtsError(error)),
-      ifRight: (audioUrl) => emit(TtsSuccess(audioUrl)),
-    );
-  }
+
 }

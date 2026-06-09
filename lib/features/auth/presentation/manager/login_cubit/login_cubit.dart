@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ishara/features/auth/domain/repos/auth_repo.dart';
 import 'login_state.dart';
@@ -26,11 +27,11 @@ class LoginCubit extends Cubit<LoginState> {
         // لو السيرفر رجع إن الحساب محتاج تفعيل (تقدر تظبط رسالة الخطأ دي بناءً على رد السيرفر الفعلي)
         if (failure.contains('تفعيل')) {
           // هتحتاج تستخرج الـ userId من الإيرور لو السيرفر بيبعته، أو تخليه يبعت كود جديد
-          emit(LoginRequiresVerification(message: failure, userId: 0)); 
+          emit(LoginRequiresVerification(message: failure, userId: 0));
         } else {
           // أي خطأ تاني (باسوورد غلط، مفيش نت، الخ)
           emit(LoginError(failure));
-          }
+        }
       },
       ifRight: (user) => emit(LoginSuccess(user, rememberMe: rememberMe)),
     );
@@ -38,14 +39,22 @@ class LoginCubit extends Cubit<LoginState> {
 
   // 1. دالة إرسال الـ OTP للإيميل
   Future<void> sendForgetPasswordOtp({required String email}) async {
-    emit(ForgetPasswordLoading());
+    debugPrint('📧 sendForgetPasswordOtp called with email: $email');
     
+    emit(ForgetPasswordLoading());
+
     // تأكد إن اسم authRepo مطابق للي عندك في الكيوبيت
     final result = await authRepo.forgetPassword(email: email);
-    
+
     result.fold(
-      ifLeft: (failure) => emit(ForgetPasswordFailure(errMessage: failure)), 
-      ifRight: (success) => emit(ForgetPasswordSuccess()), 
+      ifLeft: (failure) {
+        debugPrint('❌ ForgetPassword failed: $failure');
+        emit(ForgetPasswordFailure(errMessage: failure));
+      },
+      ifRight: (success) {
+        debugPrint('✅ ForgetPassword success - OTP sent');
+        emit(ForgetPasswordSuccess());
+      },
     );
   }
 
@@ -55,18 +64,29 @@ class LoginCubit extends Cubit<LoginState> {
     required String otp,
     required String newPassword,
   }) async {
-    emit(ResetPasswordLoading());
+    debugPrint('🔐 resetPasswordWithOtp called with:');
+    debugPrint('   Email: $email');
+    debugPrint('   OTP: $otp');
+    debugPrint('   Password length: ${newPassword.length}');
     
+    emit(ResetPasswordLoading());
+
     // <<< الغلطة كانت هنا: تم التعديل عشان ينده الدالة الصح ويبعت الداتا كلها >>>
     final result = await authRepo.resetPassword(
-      email: email, 
+      email: email,
       otp: otp,
       newPassword: newPassword,
     );
-    
+
     result.fold(
-      ifLeft: (failure) => emit(ResetPasswordFailure(errMessage: failure)), 
-      ifRight: (success) => emit(ResetPasswordSuccess()), 
+      ifLeft: (failure) {
+        debugPrint('❌ ResetPassword failed: $failure');
+        emit(ResetPasswordFailure(errMessage: failure));
+      },
+      ifRight: (success) {
+        debugPrint('✅ ResetPassword success');
+        emit(ResetPasswordSuccess());
+      },
     );
   }
 }

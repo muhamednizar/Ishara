@@ -88,5 +88,8 @@
     "Numbers": "Numbers",
     "Successful": "Successful",
     "Login Successful": "Login Successful",
-    "Go to Home": "Go to Home"
+    "Go to Home": "Go to Home",
+    "تأكيد كلمة المرور مطلوب": "Password confirmation is required",
+    "كلمة المرور غير صحيحة": "Password is incorrect",
+    "رمز التحقق غير صحيح": "Verification code is incorrect"
 }
