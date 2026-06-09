@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ishara/core/utils/app_color.dart';
+import 'package:ishara/core/utils/styles.dart';
 import 'package:ishara/features/on_boarding/presentation/views/widgets/on_boarding_page_view_body.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 

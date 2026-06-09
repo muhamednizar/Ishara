@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ishara/core/utils/app_color.dart';
-import 'package:ishara/core/utils/app_text_style.dart';
+import 'package:ishara/core/utils/styles.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({super.key, required this.text, required this.onPressed,  this.width = 343,  this.height = 48, this.enabled = true});
@@ -22,7 +21,7 @@ class CustomButton extends StatelessWidget {
           ),
         ),
         onPressed: enabled ? onPressed : null ,
-        child: Text(text,style: TextStyles.semiBold16.copyWith(color: Colors.white)),)
+        child: Text(text,style: Styles.semiBold16.copyWith(color: Colors.white)),)
       );
   }
 }

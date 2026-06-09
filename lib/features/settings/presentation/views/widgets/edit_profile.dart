@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ishara/core/services/local_session_service.dart';
+import 'package:ishara/core/utils/profile_avatar_storage.dart';
 import 'package:ishara/core/widgets/custom_button.dart';
 import 'package:ishara/core/widgets/custom_home_app_bar.dart';
 import 'package:ishara/core/widgets/custom_text__form_field.dart';
-import 'package:ishara/features/settings/presentation/views/widgets/cubit/profile_edit_cubit.dart';
+import 'package:ishara/features/settings/presentation/manager/profile_edit_cubit/profile_edit_cubit.dart';
 
 class EditProfile extends StatefulWidget {
   EditProfile({super.key});
@@ -31,12 +33,13 @@ class _EditProfileState extends State<EditProfile> {
   Future<void> _loadSession() async {
     final session = await LocalSessionService.instance.readSession();
     if (!mounted) return;
+    final savedPhoto = session?.photoPath;
+    final photoExists =
+        savedPhoto != null && await ProfileAvatarStorage.fileExists(savedPhoto);
     setState(() {
       _displayName = session?.name;
-      _photoPath = session?.photoPath;
-      if (_displayName != null && _displayName!.isNotEmpty) {
-        _fullNameController.text = _displayName!;
-      }
+      _photoPath = photoExists ? savedPhoto : null;
+      _fullNameController.text = _displayName ?? '';
     });
   }
 
@@ -51,12 +54,13 @@ class _EditProfileState extends State<EditProfile> {
     return BlocConsumer<ProfileEditCubit, ProfileEditState>(
       listener: (context, state) {
         if (state is ProfileEditNameSuccess) {
-          _fullNameController.clear();
+          setState(() {
+            _displayName = _fullNameController.text.trim();
+          });
           if (!context.mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Profile updated successfully')),
+            SnackBar(content: Text('Profile updated successfully'.tr())),
           );
-          _loadSession();
         }
         if (state is ProfileEditNameFailure) {
           if (!context.mounted) return;
@@ -65,11 +69,11 @@ class _EditProfileState extends State<EditProfile> {
           );
         }
         if (state is ProfileEditPictureSuccess) {
+          _loadSession();
           if (!context.mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Profile picture updated')),
+            SnackBar(content: Text('Profile picture updated'.tr())),
           );
-          _loadSession();
         }
         if (state is ProfileEditPictureFailure) {
           if (!context.mounted) return;
@@ -80,7 +84,7 @@ class _EditProfileState extends State<EditProfile> {
       },
       builder: (context, state) => Scaffold(
         appBar: buildCustomHomeAppBar(
-            context: context, isBack: true, title: 'Edit Profile'),
+            context: context, isBack: true, title: 'Edit Profile'.tr()),
         body: Column(
           children: [
             const SizedBox(height: 24),
@@ -106,7 +110,7 @@ class _EditProfileState extends State<EditProfile> {
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Error: $e'),
+                        content: Text('Error: '.tr() + e.toString()),
                       ),
                     );
                   }
@@ -137,7 +141,7 @@ class _EditProfileState extends State<EditProfile> {
                 final canSave = value.text.trim().length >= 3;
                 return CustomButton(
                   enabled: canSave,
-                  text: 'Save',
+                  text: 'Save'.tr(),
                   onPressed: () {
                     final newName = _fullNameController.text.trim();
                     final currentName = _displayName ?? '';
@@ -145,7 +149,7 @@ class _EditProfileState extends State<EditProfile> {
                       context.read<ProfileEditCubit>().editProfileName(newName);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('No changes to save')),
+                        SnackBar(content: Text('No changes to save'.tr())),
                       );
                     }
                   },

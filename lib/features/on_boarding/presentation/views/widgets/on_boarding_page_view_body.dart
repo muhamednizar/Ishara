@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ishara/core/services/auth_gate.dart';
-import 'package:ishara/core/utils/app_images.dart';
-import 'package:ishara/features/auth/presentation/views/login_view.dart';
+import 'package:ishara/core/utils/assets.dart';
+import 'package:ishara/features/on_boarding/presentation/onboarding_navigation.dart';
 import 'package:ishara/features/on_boarding/presentation/views/widgets/page_view_item.dart';
 
 class OnBoardingPageViewBody extends StatelessWidget {
@@ -15,7 +14,7 @@ class OnBoardingPageViewBody extends StatelessWidget {
         PageViewItem(
           
           
-          image: AppImages.OnBoardingImage1,
+          image: AssetsData.OnBoardingImage1,
           title: 'Communication Made Simple',
           description: 'Express yourself clearly, without speaking.',
           buttonText: 'Next',
@@ -25,13 +24,11 @@ class OnBoardingPageViewBody extends StatelessWidget {
         ),
         PageViewItem(
           isVisible: false,
-          image: AppImages.OnBoardingImage2,
+          image: AssetsData.OnBoardingImage2,
           title: 'Sign Language, Anywhere',
           description: 'Use ready-made signs and symbols to communicate instantly.',
           buttonText: 'Start',
-          onPressed: () {
-            Navigator.pushNamed(context, AuthGate.routeName);
-          }
+          onPressed: () => finishOnboarding(context),
         ),
       ],
     );
